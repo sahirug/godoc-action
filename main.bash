@@ -4,7 +4,8 @@ set -eo pipefail
 
 cd "$(dirname "$(find . -name 'go.mod' | head -n 1)")" || exit 1
 
-MODULE_ROOT="$(go list -m)"
+# MODULE_ROOT="$(go list -m)"
+MODULE_ROOT="example.com/stringutil"
 REPO_NAME="$(basename $(echo $GITHUB_REPOSITORY))"
 PR_NUMBER="$(echo $GITHUB_REF | sed 's#refs/pull/\(.*\)/.*#\1#')"
 
@@ -12,6 +13,7 @@ mkdir -p "$GOPATH/src/github.com/$GITHUB_REPOSITORY"
 cp -r * "$GOPATH/src/github.com/$GITHUB_REPOSITORY"
 (godoc -http localhost:8080 &)
 
+echo "module root is $MODULE_ROOT"
 for (( ; ; )); do
   sleep 0.5
   if [[ $(curl -so /dev/null -w '%{http_code}' "http://localhost:8080/pkg/$MODULE_ROOT/") -eq 200 ]]; then
