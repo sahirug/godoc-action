@@ -7,7 +7,8 @@ cd "$(dirname "$(find . -name 'go.mod' | head -n 1)")" || exit 1
 # MODULE_ROOT="$(go list -m)"
 MODULE_ROOT="example.com/stringutil"
 REPO_NAME="$(basename $(echo $GITHUB_REPOSITORY))"
-PR_NUMBER="$(echo $GITHUB_REF | sed 's#refs/heads/\(.*\)/.*#\1#')"
+# PR_NUMBER="$(echo $GITHUB_REF | sed 's#refs/heads/\(.*\)/.*#\1#')"
+PR_NUMBER="master"
 
 echo "PR number is $PR_NUMBER"
 
