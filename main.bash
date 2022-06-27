@@ -7,7 +7,7 @@ cd "$(dirname "$(find . -name 'go.mod' | head -n 1)")" || exit 1
 # MODULE_ROOT="$(go list -m)"
 MODULE_ROOT="example.com/stringutil"
 REPO_NAME="$(basename $(echo $GITHUB_REPOSITORY))"
-PR_NUMBER="$(echo $GITHUB_REF | sed 's#refs/pull/\(.*\)/.*#\1#')"
+PR_NUMBER="$(echo $GITHUB_REF | sed 's#refs/head/\(.*\)/.*#\1#')"
 
 mkdir -p "$GOPATH/src/github.com/$GITHUB_REPOSITORY"
 cp -r * "$GOPATH/src/github.com/$GITHUB_REPOSITORY"
@@ -24,6 +24,9 @@ done
 git checkout origin/gh-pages || git checkout -b gh-pages
 
 wget --quiet --mirror --show-progress --page-requisites --execute robots=off --no-parent "http://localhost:8080/pkg/$MODULE_ROOT/"
+
+echo "listing directory"
+ls -la
 
 rm -rf doc lib "$PR_NUMBER" # Delete previous documents.
 mv localhost:8080/* .
