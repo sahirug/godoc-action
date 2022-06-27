@@ -44,9 +44,10 @@ git add "$PR_NUMBER" doc lib
 git commit -m "Update documentation"
 
 GODOC_URL="https://$(dirname $(echo $GITHUB_REPOSITORY)).github.io/$REPO_NAME/$PR_NUMBER/pkg/$MODULE_ROOT/index.html"
+echo "url is $GODOC_URL"
 
-if ! curl -sH "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" | grep '## GoDoc' > /dev/null; then
-  curl -sH "Authorization: token $GITHUB_TOKEN" \
-    -d '{ "body": "## GoDoc\n'"$GODOC_URL"'" }' \
-    "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
-fi
+# if ! curl -sH "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" | grep '## GoDoc' > /dev/null; then
+#   curl -sH "Authorization: token $GITHUB_TOKEN" \
+#     -d '{ "body": "## GoDoc\n'"$GODOC_URL"'" }' \
+#     "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments"
+# fi
