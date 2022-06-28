@@ -32,7 +32,7 @@ wget --no-parent -r -l inf -p -k "http://localhost:8080/pkg/$MODULE_ROOT/"
 echo "listing directory"
 ls -la
 
-rm -rf doc lib "$PR_NUMBER" # Delete previous documents.
+rm -rf doc lib "$PR_NUMBER" robots.txt # Delete previous documents.
 [ -d "$PR_NUMBER" ] || mkdir "$PR_NUMBER" 
 mv localhost:8080/* .
 mv pkg $PR_NUMBER
@@ -44,7 +44,7 @@ ls -la $PR_NUMBER
 git config --local user.email "action@github.com"
 git config --local user.name "GitHub Action"
 
-git add "$PR_NUMBER"
+git add "$PR_NUMBER" doc lib robots.txt
 git commit -m "Update documentation"
 
 GODOC_URL="https://$(dirname $(echo $GITHUB_REPOSITORY)).github.io/$REPO_NAME/$PR_NUMBER/pkg/$MODULE_ROOT/index.html"
