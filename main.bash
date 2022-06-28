@@ -34,8 +34,8 @@ ls -la
 
 rm -rf doc lib "$PR_NUMBER" robots.txt # Delete previous documents.
 [ -d "$PR_NUMBER" ] || mkdir "$PR_NUMBER" 
-mv localhost:8080/* .
-mv pkg $PR_NUMBER
+mv localhost:8080/* $PR_NUMBER
+# mv pkg $PR_NUMBER
 rm -rf localhost:8080
 # find pkg -type f -exec sed -i "s#/lib/godoc#/$REPO_NAME/lib/godoc#g" {} +
 echo "listing $PR_NUMBER"
@@ -44,7 +44,8 @@ ls -la $PR_NUMBER
 git config --local user.email "action@github.com"
 git config --local user.name "GitHub Action"
 
-git add "$PR_NUMBER" doc lib robots.txt
+# git add "$PR_NUMBER" doc lib robots.txt
+git add "$PR_NUMBER"
 git commit -m "Update documentation"
 
 GODOC_URL="https://$(dirname $(echo $GITHUB_REPOSITORY)).github.io/$REPO_NAME/$PR_NUMBER/pkg/$MODULE_ROOT/index.html"
