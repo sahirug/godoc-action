@@ -4,8 +4,8 @@ set -eo pipefail
 
 cd "$(dirname "$(find . -name 'go.mod' | head -n 1)")" || exit 1
 
-# MODULE_ROOT="$(go list -m)"
-MODULE_ROOT="example.com/stringutil"
+MODULE_ROOT="$(go list -m)"
+echo "Module root is $MODULE_ROOT"
 REPO_NAME="$(basename $(echo $GITHUB_REPOSITORY))"
 # PR_NUMBER="$(echo $GITHUB_REF | sed 's#refs/heads/\(.*\)/.*#\1#')"
 PR_NUMBER="master"
@@ -26,21 +26,24 @@ done
 
 git checkout origin/gh-pages || git checkout -b gh-pages
 
-wget --quiet --mirror --show-progress --page-requisites --execute robots=off --no-parent "http://localhost:8080/pkg/$MODULE_ROOT/"
+# wget --quiet --mirror --show-progress --page-requisites --execute robots=off --no-parent "http://localhost:8080/pkg/$MODULE_ROOT/"
+wget --no-parent -r -l inf -p -k "http://localhost:8080/pkg/$MODULE_ROOT/"
 
 echo "listing directory"
 ls -la
 
 rm -rf doc lib "$PR_NUMBER" # Delete previous documents.
-mv localhost:8080/* .
+[ -d "$PR_NUMBER" ] || mkdir "$PR_NUMBER" 
+mv localhost:8080/pkg $PR_NUMBER
 rm -rf localhost:8080
-find pkg -type f -exec sed -i "s#/lib/godoc#/$REPO_NAME/lib/godoc#g" {} +
+# find pkg -type f -exec sed -i "s#/lib/godoc#/$REPO_NAME/lib/godoc#g" {} +
+echo "listing $PR_NUMBER"
+ls -la $PR_NUMBER
 
 git config --local user.email "action@github.com"
 git config --local user.name "GitHub Action"
-[ -d "$PR_NUMBER" ] || mkdir "$PR_NUMBER"
-mv pkg "$PR_NUMBER"
-git add "$PR_NUMBER" doc lib
+
+git add "$PR_NUMBER"
 git commit -m "Update documentation"
 
 GODOC_URL="https://$(dirname $(echo $GITHUB_REPOSITORY)).github.io/$REPO_NAME/$PR_NUMBER/pkg/$MODULE_ROOT/index.html"
