@@ -34,7 +34,8 @@ ls -la
 
 rm -rf doc lib "$PR_NUMBER" # Delete previous documents.
 [ -d "$PR_NUMBER" ] || mkdir "$PR_NUMBER" 
-mv localhost:8080/pkg $PR_NUMBER
+mv localhost:8080/* .
+mv pkg $PR_NUMBER
 rm -rf localhost:8080
 # find pkg -type f -exec sed -i "s#/lib/godoc#/$REPO_NAME/lib/godoc#g" {} +
 echo "listing $PR_NUMBER"
